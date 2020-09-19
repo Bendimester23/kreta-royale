@@ -7,7 +7,7 @@ import hu.bendi.royale.KretaRoyale;
 
 public class SplashScreen extends Screen {
 
-    int frames;
+    private int frames;
 
     @Override
     public void init() {
