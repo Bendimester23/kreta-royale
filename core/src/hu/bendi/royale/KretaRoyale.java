@@ -3,64 +3,90 @@ package hu.bendi.royale;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import hu.bendi.royale.gui.MainMenuScreen;
-import hu.bendi.royale.gui.Screen;
-import hu.bendi.royale.gui.SplashScreen;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import hu.bendi.royale.gui.ScreenManager;
+import hu.bendi.royale.input.InputManager;
+import hu.bendi.royale.renderer.TextRenderer;
+import hu.bendi.royale.renderer.TextureManager;
+import hu.bendi.royale.scene.SceneManager;
 
 public class KretaRoyale extends ApplicationAdapter {
+
 	private SpriteBatch batch;
-	private Texture img;
-	private CharSequence str = "Hello World!";
-	public static BitmapFont font;
 
-	Timer t;
-	TimerTask tt;
+	private OrthographicCamera cam;
 
-	private Screen currentScreen;
+	private TextRenderer textRenderer;
+	private SceneManager sceneManager;
+	private ScreenManager screenManager;
+	private TextureManager textureManager;
+
+	public static KretaRoyale INSTANCE;
 	
 	@Override
 	public void create () {
-		t = new Timer();
-		tt = new TimerTask() {
-			@Override
-			public void run() {
-				displayScreen(new MainMenuScreen());
-			}
-		};
+		INSTANCE = this;
+		Box2D.init();
+		Gdx.input.setInputProcessor(new InputManager());
+
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();
+
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-		font = new BitmapFont(new BitmapFont.BitmapFontData(Gdx.files.internal("font2.fnt"),false), (TextureRegion) null,false);
-		displayScreen(new SplashScreen());
-		t.schedule(tt,5000);
+
+		textRenderer = TextRenderer.of(batch, "ArchitectsDaughter");
+
+		textRenderer.useFont("ArchitectsDaughter", 20);
+
+		cam = new OrthographicCamera(w, h);
+
+		sceneManager = SceneManager.create(batch, cam);
+		screenManager = ScreenManager.create();
+		textureManager = new TextureManager();
+
+		cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
+		cam.update();
+		sceneManager.loadScene("mainmenu");
 	}
 
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
 
-		if (currentScreen != null) {
-			currentScreen.render(batch, Gdx.graphics.getDeltaTime());
-		}
+		cam.update();
+		batch.setProjectionMatrix(cam.combined);
+		
+		batch.begin();
+		sceneManager.render();
 		batch.end();
 	}
 
-	public void displayScreen(Screen screen) {
-		this.currentScreen = screen;
-		this.currentScreen.init();
+	public Matrix4 getProjectionMatrix() {
+		return cam.combined;
 	}
-	
+
+	public TextRenderer getTextRenderer() {
+		return textRenderer;
+	}
+
+	public SceneManager getSceneManager() {
+		return sceneManager;
+	}
+
+	public ScreenManager getScreenManager() {
+		return screenManager;
+	}
+
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+	}
+
+	public TextureManager getTextureManager() {
+		return textureManager;
 	}
 }

@@ -3,14 +3,35 @@ package hu.bendi.royale.gui;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import hu.bendi.royale.KretaRoyale;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Screen {
 
-    public abstract void init();
+    private List<Widget> widgets;
 
-    public abstract void render(SpriteBatch spriteBatch, float delta);
+    public void init() {
+        widgets = new ArrayList<>();
+    }
 
-    protected void drawFont(SpriteBatch sb, String text, float x, float y) {
-        if (!sb.isDrawing()) throw new UnsupportedOperationException("Not drawing");
-        KretaRoyale.font.draw(sb,text,x,y);
+    public void addWidget(Widget widget) {
+        widgets.add(widget);
+    }
+
+    public void render(SpriteBatch spriteBatch, float delta) {
+        widgets.forEach(widget -> widget.render(delta));
+    }
+
+    protected void drawFont(String text, float x, float y) {
+        KretaRoyale.INSTANCE.getTextRenderer().renderText(text, x, y);
+    }
+
+
+
+    public void onOpen() {
+    }
+
+    public void close() {
+
     }
 }

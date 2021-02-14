@@ -2,34 +2,25 @@ package hu.bendi.royale.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align;
 import hu.bendi.royale.KretaRoyale;
+import hu.bendi.royale.gui.widgets.TextWidget;
+import hu.bendi.royale.input.InputManager;
+import hu.bendi.royale.renderer.TextRenderer;
+
 
 public class SplashScreen extends Screen {
-
-    private int frames;
-
     @Override
     public void init() {
+        super.init();
         System.out.println("Init.");
+        addWidget(new TextWidget(Gdx.graphics.getHeight() >> 1, Gdx.graphics.getWidth() >> 1, "Kréta Royale"));
+        addWidget(new TextWidget(Gdx.graphics.getHeight() >> 2, Gdx.graphics.getWidth() >> 2, "By Bendi"));
     }
 
     @Override
     public void render(SpriteBatch spriteBatch, float delta) {
-        frames++;
-        KretaRoyale.font.draw(spriteBatch,"Kréta Royale", Gdx.graphics.getHeight() >> 1, Gdx.graphics.getWidth() >> 1, 0.1f, Align.topLeft, true);
-        if (frames < 20) {
-            KretaRoyale.font.draw(spriteBatch," . . . ", (Gdx.graphics.getHeight() >> 1) + 10, (Gdx.graphics.getWidth() >> 1) - 20);
-        } else if (frames < 40) {
-            KretaRoyale.font.draw(spriteBatch," o . .", (Gdx.graphics.getHeight() >> 1) + 10, (Gdx.graphics.getWidth() >> 1) - 20);
-        } else if (frames < 60) {
-            KretaRoyale.font.draw(spriteBatch," . o .", (Gdx.graphics.getHeight() >> 1) + 10, (Gdx.graphics.getWidth() >> 1) - 20);
-        } else if (frames < 80) {
-            KretaRoyale.font.draw(spriteBatch," . . o", (Gdx.graphics.getHeight() >> 1) + 10, (Gdx.graphics.getWidth() >> 1) - 20);
-        } else if (frames < 100) {
-            KretaRoyale.font.draw(spriteBatch," . . .", (Gdx.graphics.getHeight() >> 1) + 10, (Gdx.graphics.getWidth() >> 1) - 20);
-        } else {
-            frames = 0;
-        }
+        super.render(spriteBatch, delta);
+        TextRenderer txt = KretaRoyale.INSTANCE.getTextRenderer();
+        txt.renderText("asd", InputManager.x, InputManager.y, 0xff00ffaa);
     }
 }

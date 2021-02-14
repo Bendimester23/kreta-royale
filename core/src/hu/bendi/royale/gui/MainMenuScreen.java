@@ -11,6 +11,7 @@ public class MainMenuScreen extends Screen {
 
     @Override
     public void render(SpriteBatch spriteBatch, float delta) {
-        drawFont(spriteBatch,"Menu", Gdx.graphics.getHeight() >> 1, Gdx.graphics.getWidth() >> 1);
+        drawFont("Menu", Gdx.graphics.getHeight() >> 1, Gdx.graphics.getWidth() >> 1);
+        drawFont("Játék", Gdx.graphics.getHeight() >> 1 + 10, Gdx.graphics.getWidth() >> 1);
     }
 }

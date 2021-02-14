@@ -13,12 +13,16 @@ android {
         }
 
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
         applicationId "hu.bendi.royale"
-        minSdkVersion 14
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
